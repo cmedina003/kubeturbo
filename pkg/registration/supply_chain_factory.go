@@ -93,12 +93,14 @@ var (
 
 	// Common property
 	path                       = "path"
-	ActionEligibilityField     = "actionEligibility"
+	ActionEligibilityPath      = "actionEligibility"
 	providerPolicyPath         = "providerPolicy"
 	consumerPolicyPath         = "consumerPolicy"
 	availableForPlacementField = "availableForPlacement"
 	controllableField          = "controllable"
 	powerStateField            = "powerState"
+	suspendableField           = "suspendable"
+	cloneableField             = "cloneable"
 )
 
 type SupplyChainFactory struct {
@@ -237,7 +239,8 @@ func (f *SupplyChainFactory) buildNodeMergedEntityMetadata() (*proto.MergedEntit
 		builder.PropertyResizable: {},
 	}
 	mergedEntityMetadataBuilder := builder.NewMergedEntityMetadataBuilder()
-	mergedEntityMetadataBuilder.PatchField(ActionEligibilityField, []string{})
+	mergedEntityMetadataBuilder.PatchField(suspendableField, []string{ActionEligibilityPath})
+	mergedEntityMetadataBuilder.PatchField(cloneableField, []string{ActionEligibilityPath})
 	mergedEntityMetadataBuilder.PatchField(availableForPlacementField, []string{providerPolicyPath})
 	mergedEntityMetadataBuilder.PatchField(controllableField, []string{consumerPolicyPath})
 	// Set up matching criteria based on stitching type
@@ -501,7 +504,8 @@ func (f *SupplyChainFactory) buildVolumeMergedEntityMetadata() (*proto.MergedEnt
 
 	mergedEntityMetadataBuilder := builder.NewMergedEntityMetadataBuilder()
 
-	mergedEntityMetadataBuilder.PatchField(ActionEligibilityField, []string{}).
+	mergedEntityMetadataBuilder.PatchField(suspendableField, []string{ActionEligibilityPath}).
+		PatchField(cloneableField, []string{ActionEligibilityPath}).
 		PatchField(powerStateField, []string{}).
 		InternalMatchingProperty(proxyVolumeUUID).
 		ExternalMatchingField(supplychain.SUPPLY_CHAIN_CONSTANT_ID, []string{}).
